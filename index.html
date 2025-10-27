@@ -1,0 +1,1241 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>DSA Prep Sheet</title>
+  <link rel="icon"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop stop-color='%23ec4899'/%3E%3Cstop offset='0.5' stop-color='%232563eb'/%3E%3Cstop offset='1' stop-color='%2310b981'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='128' height='128' rx='28' fill='url(%23g)'/%3E%3Ctext x='64' y='84' text-anchor='middle' font-size='64' font-family='Inter, Arial, sans-serif' font-weight='800' fill='white'%3EDS%3C/text%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f8f8fb;
+      --card: #fff;
+      --border: #e6e6ef;
+      --text: #27272a;
+      --muted: #6b7280;
+      --pink-50: #fff1f2;
+      --pink-200: #fecdd3;
+      --pink-500: #f472b6;
+      --pink-600: #ec4899;
+      --blue-50: #eff6ff;
+      --blue-200: #bfdbfe;
+      --blue-500: #3b82f6;
+      --blue-600: #2563eb;
+      --green-50: #ecfdf5;
+      --green-200: #bbf7d0;
+      --green-500: #10b981;
+      --green-600: #059669;
+      --amber-50: #fffbeb;
+      --amber-200: #fde68a;
+      --amber-500: #f59e0b;
+      --amber-600: #d97706;
+      --shadow: 0 1px 1px rgba(0, 0, 0, .03), 0 4px 12px rgba(0, 0, 0, .06);
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    /* === Page-wide LEFT→RIGHT light blue gradient === */
+    /* RESET any stray top spacing */
+    html,
+    body {
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+
+    header {
+      margin: 0 !important;
+    }
+
+    /* PAGE: left→right light-blue gradient */
+    html,
+    body {
+      height: 100%;
+      background: linear-gradient(90deg, #b7cef2 0%, #f4f8ff 50%, #eaf2ff 100%);
+      font-family: var(--font-sans, "Proxima Nova", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif);
+    }
+
+    /* keep blobs subtle and behind the gradient */
+    .bg-blobs {
+      z-index: -2;
+    }
+
+    .blob {
+      opacity: .22;
+    }
+
+    /* HEADER: no hard edge; diffuse into the page */
+    header {
+      position: sticky;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 30;
+      overflow: visible;
+      border-bottom: 0;
+      /* remove the seam */
+      -webkit-backdrop-filter: saturate(1.1) blur(6px);
+      backdrop-filter: saturate(1.1) blur(6px);
+
+      /* soft orange wash that matches the page under it */
+      background: linear-gradient(180deg,
+          rgba(240, 180, 116, 0.72) 0%,
+          rgba(240, 180, 116, 0.48) 70%,
+          rgba(240, 180, 116, 0.28) 100%);
+    }
+
+    /* fade the orange below the header (perfectly aligned to its bottom) */
+    header::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      /* starts exactly at header bottom */
+      left: 0;
+      width: 100%;
+      height: 130px;
+      /* thickness of the fade */
+      pointer-events: none;
+      background: linear-gradient(to bottom,
+          rgba(240, 180, 116, 0.18) 0%,
+          rgba(240, 180, 116, 0.10) 45%,
+          rgba(240, 180, 116, 0.05) 70%,
+          transparent 100%);
+      filter: blur(1px);
+      /* ultra-soft edge */
+    }
+
+    /* Animated pastel blobs (kept subtle) */
+    .bg-blobs {
+      position: fixed;
+      inset: -20vh -10vw auto -10vw;
+      z-index: -1;
+      pointer-events: none
+    }
+
+    .blob {
+      position: absolute;
+      filter: blur(50px);
+      opacity: .25;
+      border-radius: 50%;
+      animation: blob 14s infinite
+    }
+
+    .b1 {
+      width: 26rem;
+      height: 26rem;
+      background: var(--pink-200);
+      top: -6rem;
+      left: -6rem
+    }
+
+    .b2 {
+      width: 30rem;
+      height: 30rem;
+      background: var(--blue-200);
+      top: 30vh;
+      right: -8rem;
+      animation-delay: 2s
+    }
+
+    .b3 {
+      width: 34rem;
+      height: 34rem;
+      background: var(--green-200);
+      bottom: -8rem;
+      left: 25vw;
+      animation-delay: 4s
+    }
+
+    @keyframes blob {
+      0% {
+        transform: translate(0, 0) scale(1)
+      }
+
+      33% {
+        transform: translate(30px, -20px) scale(1.05)
+      }
+
+      66% {
+        transform: translate(-25px, 15px) scale(.97)
+      }
+
+      100% {
+        transform: translate(0, 0) scale(1)
+      }
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 16px
+    }
+
+    /* Header with orange backdrop and bottom diffusion */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      overflow: visible;
+      -webkit-backdrop-filter: saturate(1.1) blur(6px);
+      backdrop-filter: saturate(1.1) blur(6px);
+      background:
+        linear-gradient(90deg, rgba(255, 166, 0, .12), rgba(255, 166, 0, .04)),
+        rgba(240, 180, 116, .72);
+      border-bottom: 1px solid var(--border);
+    }
+
+    header::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -80px;
+      height: 140px;
+      pointer-events: none;
+      background: linear-gradient(to bottom,
+          rgba(240, 180, 116, .35),
+          rgba(240, 180, 116, .18) 40%,
+          rgba(240, 180, 116, .08) 70%,
+          transparent);
+      filter: blur(1px);
+    }
+
+    .header-inner {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 8px
+    }
+
+    .title {
+  /* type */
+  font-family: var(--font-sans, "Proxima Nova", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif);
+  font-weight: 800;
+  letter-spacing: -0.015em;
+  font-size: clamp(26px, 2.4vw, 40px);
+  line-height: 1.1;
+
+  /* gradient text */
+  background: linear-gradient(90deg, #fd4598 0%, #236fd9 50%, #08a37a 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+
+  /* layout */
+  position: relative;
+  display: inline-block;
+  padding: .15rem .4rem;
+
+  /* no heavy shadows/borders */
+  text-shadow: none;
+  border: 0;
+}
+
+/* subtle, minimal capsule behind the text */
+
+/* tiny affordance on hover, still minimal */
+.title:hover::before {
+  border-color: rgba(255, 255, 255, .4);
+}
+
+
+    .tagbar {
+      display: flex;
+      gap: 6px;
+      align-items: center
+    }
+
+    .pill {
+      border: 1px solid;
+      padding: .25rem .6rem;
+      border-radius: 999px;
+      font-size: 12px;
+      cursor: pointer;
+      user-select: none;
+      transition: .15s
+    }
+
+    .pill.notes {
+      background: var(--pink-50);
+      border-color: var(--pink-200);
+      color: #7a2146
+    }
+
+    .pill.concept {
+      background: var(--blue-50);
+      border-color: var(--blue-200);
+      color: #113a7a
+    }
+
+    .pill.questions {
+      background: var(--green-50);
+      border-color: var(--green-200);
+      color: #0a3f2f
+    }
+
+    .pill.neetcode {
+      background: var(--amber-50);
+      border-color: var(--amber-200);
+      color: #6a3c00
+    }
+
+    .pill.active.notes {
+      background: var(--pink-500);
+      color: #fff;
+      border-color: var(--pink-600)
+    }
+
+    .pill.active.concept {
+      background: var(--blue-500);
+      color: #fff;
+      border-color: var(--blue-600)
+    }
+
+    .pill.active.questions {
+      background: var(--green-500);
+      color: #fff;
+      border-color: var(--green-600)
+    }
+
+    .pill.active.neetcode {
+      background: var(--amber-500);
+      color: #fff;
+      border-color: var(--amber-600)
+    }
+
+    .search-row {
+      display: flex;
+      gap: 8px;
+      margin: 10px 0 14px
+    }
+
+    .search {
+      position: relative;
+      flex: 1
+    }
+
+    .search input {
+      width: 100%;
+      padding: 10px 12px 10px 36px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      outline: none;
+      background: #fff;
+      transition: .15s
+    }
+
+    .search input:focus {
+      box-shadow: 0 0 0 4px rgba(59, 130, 246, .15)
+    }
+
+    .search svg {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      opacity: .45
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #fff;
+      border: 1px solid var(--border);
+      padding: 9px 12px;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: var(--shadow)
+    }
+
+    .btn:hover {
+      background: #fafafa
+    }
+
+    .accordion {
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, .85);
+      box-shadow: var(--shadow);
+      border-radius: 18px;
+      overflow: hidden
+    }
+
+    .acc-item+.acc-item {
+      border-top: 1px solid var(--border)
+    }
+
+    .acc-button {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px;
+      background: none;
+      border: 0;
+      cursor: pointer
+    }
+
+    .acc-title {
+      font-weight: 600
+    }
+
+    .chev {
+      transition: transform .2s ease
+    }
+
+    .acc-button[aria-expanded="true"] .chev {
+      transform: rotate(180deg)
+    }
+
+    .acc-panel {
+      display: none;
+      padding: 10px 16px 16px
+    }
+
+    .acc-item.open .acc-panel {
+      display: block
+    }
+
+    .card {
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 14px;
+      margin: 10px 0
+    }
+
+    .card.notes {
+      background: var(--pink-50);
+      border-color: var(--pink-200)
+    }
+
+    .card.concept {
+      background: var(--blue-50);
+      border-color: var(--blue-200)
+    }
+
+    .card.notes .inline-link {
+  color: var(--pink-600);
+  text-decoration: underline;
+  font-weight: 600;
+}
+.card.notes .inline-link:hover { opacity: .85; }
+
+    .card.questions {
+      background: var(--green-50);
+      border-color: var(--green-200)
+    }
+
+    .card.neetcode {
+      background: var(--amber-50);
+      border-color: var(--amber-200)
+    }
+
+    .card-head {
+      display: flex;
+      align-items: start;
+      justify-content: space-between;
+      gap: 10px
+    }
+
+    .tag {
+      font-size: 12px;
+      border: 1px solid;
+      border-radius: 999px;
+      padding: .2rem .5rem
+    }
+
+    .tag.notes {
+      background: var(--pink-50);
+      border-color: var(--pink-200);
+      color: #7a2146
+    }
+
+    .tag.concept {
+      background: var(--blue-50);
+      border-color: var(--blue-200);
+      color: #113a7a
+    }
+
+    .tag.questions {
+      background: var(--green-50);
+      border-color: var(--green-200);
+      color: #0a3f2f
+    }
+
+    .tag.neetcode {
+      background: var(--amber-50);
+      border-color: var(--amber-200);
+      color: #6a3c00
+    }
+
+    .card .list {
+      margin: .5rem 0 0
+    }
+
+    .card.notes .list {
+      list-style: disc;
+      padding-left: 20px
+    }
+
+    .card:not(.notes) .list {
+      list-style: none;
+      padding-left: 0
+    }
+
+    .list li {
+      margin: .35rem 0
+    }
+
+    /* Bright button pills in cards */
+    .card.notes .link {
+      background: linear-gradient(90deg, #ff3d7a, #ff6aa5);
+      border-color: #ff2d6a;
+      color: #fff;
+      box-shadow: var(--shadow);
+      font-weight: 600;
+    }
+
+    .card.concept .link {
+      background: linear-gradient(90deg, #2563eb, #60a5fa);
+      border-color: #1e4fd6;
+      color: #fff;
+      box-shadow: var(--shadow);
+      font-weight: 600;
+    }
+
+    .card.questions .link {
+      background: linear-gradient(90deg, #059669, #34d399);
+      border-color: #047857;
+      color: #fff;
+      box-shadow: var(--shadow);
+      font-weight: 600;
+    }
+
+    .card.neetcode .link {
+      background: linear-gradient(90deg, #f59e0b, #fbbf24);
+      border-color: #d97706;
+      color: #fff;
+      box-shadow: var(--shadow);
+      font-weight: 600;
+    }
+
+    .card .link:hover {
+      filter: brightness(1.05);
+      transform: translateY(-1px)
+    }
+
+    .qrow {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 8px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: #fff
+    }
+
+    .link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      text-decoration: none;
+      color: var(--text);
+      background: #fff
+    }
+
+    .link.disabled {
+      opacity: .45;
+      pointer-events: none
+    }
+
+    footer {
+      color: #575757;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 18px 0 26px
+    }
+
+    footer a {
+      color: inherit
+    }
+
+    .hidden {
+      display: none !important
+    }
+
+    .muted {
+      color: var(--muted)
+    }
+
+    .row {
+      display: flex;
+      gap: 8px;
+      align-items: center
+    }
+
+    /* Mini accordion (Section 2 groups & Section 5 subsections) */
+    .sub-acc {
+      border: 1px dashed var(--border);
+      border-radius: 12px;
+      padding: 6px 10px 6px 10px;
+      background: rgba(255, 255, 255, .6);
+      margin-top: 10px;
+    }
+
+    .sub-acc-item+.sub-acc-item {
+      border-top: 1px solid var(--border);
+    }
+
+    .sub-acc-button {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 6px;
+      background: none;
+      border: 0;
+      cursor: pointer
+    }
+
+    .sub-acc-title {
+      font-weight: 600
+    }
+
+    .subchev {
+      transition: transform .2s ease
+    }
+
+    .sub-acc-button[aria-expanded="true"] .subchev {
+      transform: rotate(180deg)
+    }
+
+    .sub-acc-panel {
+      display: none;
+      padding: 8px 6px 10px
+    }
+
+    .sub-acc-item.open .sub-acc-panel {
+      display: block
+    }
+
+    /* Inline link styling inside Concepts list items */
+    .card.concept .inline-link {
+      color: var(--blue-600);
+      text-decoration: underline;
+      font-weight: 600
+    }
+
+    .card.concept .inline-link:hover {
+      opacity: .85
+    }
+  </style>
+</head>
+
+<body>
+  <div class="bg-blobs">
+    <div class="blob b1"></div>
+    <div class="blob b2"></div>
+    <div class="blob b3"></div>
+  </div>
+
+  <header>
+    <div class="container header-inner">
+      <div class="title">DSA Prep Sheet</div>
+      <div class="tagbar" id="filterBar">
+        <button class="pill notes" data-filter="notes" title="Show Notes">Notes</button>
+        <button class="pill concept" data-filter="concept" title="Show Concepts">Concepts</button>
+        <button class="pill questions" data-filter="questions" title="Show Questions">Questions</button>
+        <button class="pill neetcode" data-filter="neetcode" title="Show NeetCode">NeetCode</button>
+      </div>
+    </div>
+    <div class="container">
+      <div class="search-row">
+        <div class="search">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input id="searchBox" type="text" placeholder="Search questions, notes, concepts…" />
+        </div>
+        <button id="toggleEmpty" class="btn" title="Hide empty sections">
+          <svg id="eyeIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"></path>
+            <circle cx="12" cy="12" r="3"></circle>
+          </svg>
+          <span id="emptyLabel">Hide empty</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <p class="muted" style="margin:10px 0 14px; color: black; font-weight: 1000">Filter by tag, search across all rows,
+      and optionally hide sections that become empty after filtering!</p>
+    <div class="accordion" id="accordionRoot"></div>
+    <footer>
+      <div style="color: black; font-size: 1rem;">Made with 💜 by <a href="https://github.com/haseebshaik00" target="_blank" rel="noreferrer"
+          style="text-decoration:underline; color: blue;">Haseeb</a></div>
+    </footer>
+  </main>
+
+  <script>
+    /* Default/fallback links */
+    const NOTES_URL = "https://github.com/haseebshaik00/MS-PP-24/tree/main/DSA/Codes";
+    const NEETCODE_URL = "https://neetcode.io/practice?tab=neetcode150";
+
+    /* Data
+       - Set per-section Notes link with `notesUrl`
+       - For sections with subsections, you can also set `notesUrl` inside each subsection.
+       - If `notesUrl` is omitted anywhere, we fall back to NOTES_URL.
+    */
+    const SECTIONS = [
+      {
+        id: 1, title: "Section 1: Arrays I",
+        // notesUrl: "https://your-custom-link-for-arrays1.com",  // ← optional override
+        notes: ["Array Basics", "Arrays Passed to Functions", "2D Array Allocation {https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/4-2D-Arrays/dynamicAllocation.cpp}", "Pointers {https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/0-GeneralConcepts/pointers.cpp}", "Dynamic Memory Allocation", "Vectors Implementation {https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/0-GeneralConcepts/vector.h}", "STL: vector, map, set"],
+        neetcode: ["Neetcode 1: Array & Hashing", "Neetcode 2: Two Pointers"]
+      },
+
+      {
+        id: 2, title: "Section 2: Arrays II",
+        neetcode: ["Neetcode 3: Sliding Window", "Neetcode 17: Math & Geometry"],
+        notesUrl: "http://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/33-Hashing/hash.h",
+        notes: [
+          "STL sort & custom comparator {https://www.geeksforgeeks.org/sort-c-stl/}",
+          "General Hashing Concepts",
+          "Hashtable Implementation: insert/delete/search/erase/[] operator overload/print",
+          "map vs unordered_map",
+          "unordered_map with custom key"
+        ],
+        questions: [
+          {
+            group: "Searching & Sorting", items: [
+              { label: "Linear Search", problem: "https://www.geeksforgeeks.org/problems/search-an-element-in-an-array-1587115621/1", solution: "https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/1-Searching/linearSearch.cpp" },
+              { label: "Binary Search", problem: "https://leetcode.com/problems/binary-search/", solution: "https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/1-Searching/binarySearch.cpp" },
+              { label: "Bubble Sort", problem: "https://www.geeksforgeeks.org/problems/bubble-sort/1", solution: "https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/2-Sorting/bubbleSort.cpp" },
+              { label: "Selection Sort", problem: "https://www.geeksforgeeks.org/problems/selection-sort/1", solution: "https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/2-Sorting/selectionSort.cpp" },
+              { label: "Insertion Sort", problem: "https://www.geeksforgeeks.org/problems/insertion-sort/1", solution: "https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/2-Sorting/insertionSort.cpp" },
+              { label: "Bubble Sort with Comparator", problem: "https://coderanch.com/t/374811/java/Bubble-Sort-Set-Comparator", solution: "https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/2-Sorting/bubbleSortComp.cpp"},
+            ]
+          },
+          {
+            group: "Advanced Arrays", items: [
+              { label: "Sum of all submatrices O(n^2)", problem: "https://www.geeksforgeeks.org/sum-of-all-submatrices-of-a-given-matrix/", solution: "https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/7-2DArrayQues/sumSubmatricesO(n%5E2).cpp" },
+              { label: "Submatrix Sum Query", problem: "https://www.geeksforgeeks.org/problems/queries-on-a-matrix0443/1", solution: "https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/7-2DArrayQues/submatrixSumQuery.cpp" },
+              { label: "Max Sum Submatrix (sorted rows & cols)", problem: "https://www.geeksforgeeks.org/maximum-sum-of-any-submatrix-of-a-matrix-which-is-sorted-row-wise-and-column-wise/", solution: "https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/7-2DArrayQues/maxSumRowColSorted.cpp" },
+              { label: "Max Circular Subarray Sum", problem: "https://www.geeksforgeeks.org/problems/max-circular-subarray-sum-1587115620/1", solution: "https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/8-ArrayChallenges/maxCircularSum.cpp" },
+              { label: "Max Length Bitonic Subarray", problem: "https://www.geeksforgeeks.org/problems/maximum-length-bitonic-subarray5730/1", solution: "https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/8-ArrayChallenges/maxLengthBitonicSubarray.cpp" },
+              { label: "Largest Number from Array", problem: "https://www.geeksforgeeks.org/problems/largest-number-formed-from-an-array1117/1", solution: "https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/8-ArrayChallenges/FormLargestNumber.cpp" },
+              { label: "Sum of Two Arrays", problem: "https://www.geeksforgeeks.org/problems/add-two-numbers-represented-by-two-arrays2408/1", solution: "https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/8-ArrayChallenges/sum2arrays.cpp" },
+              { label: "Factorial of Large Numbers", problem: "https://www.geeksforgeeks.org/problems/factorials-of-large-numbers2508/1", solution: "https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/8-ArrayChallenges/brokenCalci.cpp" },
+            ]
+          },
+          {
+            group: "Hashing", items: [
+              { label: "Vertical Order Traversal", problem: "https://leetcode.com/problems/vertical-order-traversal-of-a-binary-tree/description/", solution: "https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/33-Hashing/verticalPrint.cpp" },
+              { label: "Subarray Sum Equals K", problem: "https://leetcode.com/problems/subarray-sum-equals-k/description/", solution: "https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/33-Hashing/subarrayEqualK.cpp" },
+              { label: "Longest Subarray with Sum K", problem: "https://www.geeksforgeeks.org/problems/longest-sub-array-with-sum-k0809/1", solution: "https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/33-Hashing/longestKSum.cpp" },
+            ]
+          },
+          {
+            group: "More Sorting", items: [
+              { label: "DNF Sort / Sort Colors", problem: "https://leetcode.com/problems/sort-colors/", solution: "https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/12-SearchingNSorting/DNFsort.cpp" },
+              { label: "Counting Sort", problem: "https://www.geeksforgeeks.org/counting-sort/", solution: "https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/12-SearchingNSorting/CountingSort.cpp" },
+              { label: "Merge Sort", problem: "https://www.geeksforgeeks.org/merge-sort/", solution: "https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/12-SearchingNSorting/mergeSort.cpp" },
+              { label: "Quick Sort", problem: "https://www.geeksforgeeks.org/quick-sort-algorithm/", solution: "https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/12-SearchingNSorting/quickSort.cpp" },
+              { label: "Wave Sort", problem: "https://www.geeksforgeeks.org/sort-array-wave-form-2/", solution: "https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/12-SearchingNSorting/waveSort.cpp" },
+              { label: "Bucket Sort", problem: "https://www.geeksforgeeks.org/bucket-sort-2/", solution: "https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/12-SearchingNSorting/bucketSort.cpp" },
+            ]
+          },
+        ]
+      },
+
+      {
+        id: 3, title: "Section 3: Strings",
+        notes: ["Character arrays {https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/5-CharacterArrays/io.cpp}", "2D char arrays {https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/5-CharacterArrays/io.cpp}", "2D Char Arrays Pt. 2 {https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/4-2D-Arrays/charArray.cpp}", "String basics {https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/6-Strings/stringBasics.cpp}"],
+        questions: [
+          { label: "Remove Duplicate Letters", problem: "https://leetcode.com/problems/remove-duplicate-letters/", solution: "https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/5-CharacterArrays/removeDuplicate.cpp" },
+          { label: "Remove All Duplicates from String", problem: "https://www.geeksforgeeks.org/problems/remove-all-duplicates-from-a-given-string4321/1", solution: "" },
+          { label: "String Tokenizing in C++", problem: "https://www.geeksforgeeks.org/tokenizing-a-string-cpp/", solution: "https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/6-Strings/tokenizer.cpp" },
+          { label: "String Compression", problem: "https://leetcode.com/problems/string-compression/description/", solution: "https://leetcode.com/problems/string-compression/description/" },
+        ]
+      },
+
+      {
+        id: 4, title: "Section 4: Binary Search",
+        neetcode: ["Neetcode 5: Binary Search"],
+        questions: [
+          { label: "k-th Root", problem: "https://www.naukri.com/code360/problems/1062679?topList=striver-sde-sheet-problems&utm_source=striver&utm_medium=website", solution: "https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/11-BinarySearch/kthRoot.cpp" },
+          { label: "Aggressive Cows", problem: "https://www.geeksforgeeks.org/problems/aggressive-cows/0", solution: "https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/11-BinarySearch/aggrCows.cpp" },
+          { label: "Allocate Books (InterviewBit)", problem: "https://www.interviewbit.com/problems/allocate-books/", solution: "https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/11-BinarySearch/bookAllocation.cpp" },
+          { label: "PRATA (SPOJ)", problem: "https://www.spoj.com/problems/PRATA/", solution: "https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/11-BinarySearch/PRATA.cpp" },
+        ]
+      },
+
+      /* Split into Bit Masking + Number Theory */
+      {
+        id: 5, title: "Section 5: Bit Manipulation & Number Theory",
+        // notesUrl: "https://your-custom-link-for-section5.com",        // optional section-wide default
+        subsections: [
+          {
+            heading: "[1] Bit Masking",
+            notesUrl: "https://github.com/haseebshaik00/MS-PP-24/tree/main/DSA/Codes/14-BitManipulation",   // optional override for this subsection
+            neetcode: ["Neetcode 18: Bit Manipulation"],
+            concepts: ["Signed vs Unsigned Numbers concepts {https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/14-BitManipulation/signed-unsigned-concepts.md}"],
+            notes: [
+              "Bit manipulation toolkit (set/get/toggle) {https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/14-BitManipulation/bitManipulations.cpp}",
+              "Replace bits n..m {https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/14-BitManipulation/replaceNM.cpp}",
+              "Count set bits {https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/14-BitManipulation/countSetBits.cpp}",
+              "Decimal ↔ Binary {https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/14-BitManipulation/decimalBinary.cpp}",
+              "Fast exponentiation {https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/14-BitManipulation/fastExp.cpp}",
+              "Subsets via bitmasks {https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/14-BitManipulation/subset.cpp}",
+              "Reverse bits {https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/14-BitManipulation/reverseBits.cpp}"
+            ],
+            questions: [
+              { label: "Single Number (Unique Number 1)", problem: "https://leetcode.com/problems/single-number/", solution: "https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/14-BitManipulation/uniqueNumber1.cpp" },
+              { label: "Two numbers appear once (Unique Number 2)", problem: "https://www.geeksforgeeks.org/problems/finding-the-numbers0215/1", solution: "https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/14-BitManipulation/uniqueNumber2.cpp" },
+              { label: "Only once when others thrice (Unique Number 3)", problem: "https://www.geeksforgeeks.org/problems/find-element-occuring-once-when-all-other-are-present-thrice/1", solution: "https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/14-BitManipulation/uniqueNumber3.cpp" },
+              { label: "XOR in range [L, R]", problem: "https://www.geeksforgeeks.org/problems/find-xor-of-numbers-from-l-to-r/1", solution: "https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/14-BitManipulation/Xorab.cpp" },
+              { label: "Max XOR in range", problem: "https://www.geeksforgeeks.org/dsa/maximum-xor-value-of-a-pair-from-a-range/", solution: "https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/14-BitManipulation/maxXorAB.cpp" },
+            ]
+          },
+          {
+            heading: "[2] Number Theory (85)",
+            notesUrl: "https://github.com/haseebshaik00/MS-PP-24/tree/main/DSA/Codes/15-NumberTheory", // optional override for this subsection
+            concepts: [
+              "Prime numbers: O(n) brute; O(√n) optimized; Sieve O(n log log n)",
+              "Count primes in 1..n: brute O(n²); optimized O(n√n); sieve O(n log log n)",
+              "Prime factorization: brute O(n); optimized O(√n); SPF/sieve precompute: O(n logn(logn) + log(n))",
+              "Modulo properties"
+            ],
+            notes: [
+              "Prime Sieve: https://www.geeksforgeeks.org/sieve-of-eratosthenes/ {https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/15-NumberTheory/primeSeive.cpp}",
+              "PF Prime Sieve: https://www.geeksforgeeks.org/sieve-of-eratosthenes/ {https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/15-NumberTheory/pfPrimeSeive.cpp}",
+              "Prime Visits: https://github.com/Mugdha-Hazra/CODING-BLOCKS-COMPETITIVE-CODING-COURSE/blob/main/Prime%20Visits.cpp {https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/15-NumberTheory/primeVisits.cpp}",
+              "Prime Factorization Optimization + Sieve {https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/15-NumberTheory/pfOpt.cpp}",
+              "Counting Divisors {https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/15-NumberTheory/countingDivisors.cpp}",
+              "GCD & LCM {https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/15-NumberTheory/gcd.cpp}",
+              "Divisible Subarrays {https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/15-NumberTheory/divisibleSubarray.cpp}",
+              "Modular Exponentiation {https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/15-NumberTheory/aPbMc.cpp}",
+              "Inclusion–Exclusion {https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/15-NumberTheory/incexcProblem.cpp}"
+            ]
+          }
+        ]
+      },
+
+      {
+        id: 6, title: "Section 6: Recursion",
+        notes: ["Recursion Patterns & Backtracking"],
+        neetcode: ["Neetcode 9: Backtracking"],
+        questions: [
+          { label: "Bubble Sort (Recursive)", problem: "https://www.geeksforgeeks.org/problems/bubble-sort/1", solution: "https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/17-Recursion(Part-2)/bubbleSort.cpp" },
+          { label: "Inversion Count", problem: "https://www.geeksforgeeks.org/problems/inversion-of-array-1587115620/1", solution: "https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/17-Recursion(Part-2)/inversionCount.cpp" },
+          { label: "Sort an Array", problem: "https://leetcode.com/problems/sort-an-array/description/", solution: "https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/16-Recursion(Part-1)/arraySorted.cpp" },
+          { label: "Tiling Problem", problem: "https://www.geeksforgeeks.org/problems/ways-to-tile-a-floor5836/1", solution: "https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/18-Recursion(Part-3)/tilingProblem.cpp" },
+          { label: "0/1 Knapsack", problem: "https://www.geeksforgeeks.org/problems/0-1-knapsack-problem0945/1", solution: "https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/19-Recursion(Part-4)/knapsackRecursion.cpp" },
+          { label: "0/N Knapsack", problem: "https://www.geeksforgeeks.org/problems/knapsack-with-duplicate-items4201/1", solution: "https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/37-DynamicProgramming/0NKnapsack.cpp" },
+          { label: "Rat in a Maze", problem: "https://www.geeksforgeeks.org/problems/rat-in-a-maze-problem/1", solution: "https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/20-Recursion(Part-5)/ratInAMaze.cpp" },
+          { label: "Sudoku Solver", problem: "https://leetcode.com/problems/sudoku-solver/description/", solution: "https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/20-Recursion(Part-5)/sudoku.cpp" },
+        ]
+      },
+
+      {
+        id: 7, title: "Section 7: Linked List",
+        notesUrl: "https://github.com/haseebshaik00/MS-PP-24/tree/main/DSA/Codes/23-LinkedList",
+        notes: [
+          "Singly LL (class + streams, length, insertAtHead, insertAtTail, insertAtMiddle, print, deleteHead, deleteTail, deleteMiddle, search) {https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/23-LinkedList/ll.cpp}",
+          "Find middle node, remove cycle {https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/23-LinkedList/ll.cpp}",
+          "DLL & CLL basics (insert/print/delete) {https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/23-LinkedList/cll.cpp}",
+          "List: Adjacency list for weighted graphs {https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/23-LinkedList/adjacencyList.cpp}",
+          "STL List & Forward List"
+        ],
+        neetcode: ["Neetcode 6: Linked List"],
+        questions: [
+          { label: "Intersection of two LL", problem: "https://leetcode.com/problems/intersection-of-two-linked-lists/", solution: "https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/24-LLChallenges/intersection2LL.cpp" },
+          { label: "Palindrome LL", problem: "https://leetcode.com/problems/palindrome-linked-list/description/", solution: "https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/24-LLChallenges/palindromeLL.cpp" },
+          { label: "Linked List Cycle II (start of loop)", problem: "https://leetcode.com/problems/linked-list-cycle-ii/description/", solution: "https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/24-LLChallenges/StartingPointLoop.cpp" },
+          { label: "Flatten a LL", problem: "https://www.geeksforgeeks.org/problems/flattening-a-linked-list/1", solution: "https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/24-LLChallenges/flattenOfLL.cpp" },
+          { label: "Segregate even & odd nodes", problem: "https://www.geeksforgeeks.org/problems/segregate-even-and-odd-nodes-in-a-linked-list5035/1", solution: "https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/24-LLChallenges/evenAfterOddLL.cpp" },
+          { label: "Insertion Sort List", problem: "https://leetcode.com/problems/insertion-sort-list/description/", solution: "https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/24-LLChallenges/insertionSort.cpp" },
+        ]
+      },
+
+      {
+        id: 8, title: "Section 8: Stack + Queue + Deque",
+        notes: ["Stack, Queue & Deque Implementation & Concepts"],
+        neetcode: ["Neetcode 4: Stack"],
+        questions: [
+          { label: "Reverse & Recursive a Stack", problem: "https://www.geeksforgeeks.org/problems/reverse-a-stack/1", solution: "https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/25-Stack/reverseStack.cpp" },
+          { label: "Online Stock Span", problem: "https://leetcode.com/problems/online-stock-span/description/", solution: "https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/25-Stack/stockSpan.cpp" },
+          { label: "Next Greater Element", problem: "https://leetcode.com/problems/next-greater-element-i/description/", solution: "https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/28-SQDChallenges/nextGreaterElement2.cpp" },
+          { label: "Redundant Parenthesis", problem: "https://www.geeksforgeeks.org/problems/expression-contains-redundant-bracket-or-not/1", solution: "https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/28-SQDChallenges/redundantParanthesis1.cpp" },
+          { label: "Implement Stack using 2 Queues", problem: "https://leetcode.com/problems/implement-stack-using-queues/description/", solution: "https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/26-Queue/stack2queue.cpp" },
+          { label: "Implement Queue using 2 Stacks", problem: "https://leetcode.com/problems/implement-queue-using-stacks/description/", solution: "https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/26-Queue/queue2stacks.cpp" },
+          { label: "First Unique/Non-repeating Character", problem: "https://leetcode.com/problems/first-unique-character-in-a-string/description/", solution: "https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/26-Queue/nonRepeat.cpp" },
+        ]
+      },
+
+      {
+        id: 9, title: "Section 9: OOPS",
+        notesUrl: "https://youtu.be/mlIUKyZIUUU?si=bxQkHjn_DoqJlbTm",
+        notes: ["OOPs concepts {https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/22-OOPS/oops.cpp}", "Generic Programming in C++ [Templates + Iterators]", "Space & Time Complexity (DAA Notes)"]
+      },
+
+      {
+        id: 10, title: "Section 10: Trees",
+        notes: ["Binary Tree {https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/29-BinaryTree/main.cpp}", "BST {https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/30-BST/main.cpp}"],
+        neetcode: ["Neetcode 7: Trees"],
+        questions: [
+          { label: "All Nodes Distance K", problem: "https://leetcode.com/problems/all-nodes-distance-k-in-binary-tree/description/", solution: "http://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/29-BinaryTree/main.cpp" },
+          { label: "LCA of Binary Tree", problem: "https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/description/", solution: "http://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/29-BinaryTree/main.cpp" },
+          { label: "Distance between two nodes", problem: "https://www.geeksforgeeks.org/dsa/find-distance-between-two-nodes-of-a-binary-tree/", solution: "http://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/29-BinaryTree/main.cpp" },
+          { label: "Root to Leaf Paths", problem: "https://www.geeksforgeeks.org/problems/root-to-leaf-paths/1?utm_source=youtube&utm_medium=collab_striver_ytdescription&utm_campaign=root-to-leaf-paths", solution: "https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/29-BinaryTree/rootToLeaf.cpp" },
+          { label: "Symmetric Tree", problem: "https://leetcode.com/problems/symmetric-tree/description/", solution: "https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/31-TreesChallenges/symmetricTree.cpp" },
+          { label: "Flatten Binary Tree to Linked List", problem: "https://leetcode.com/problems/flatten-binary-tree-to-linked-list/", solution: "https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/29-BinaryTree/flattenTree.cpp" },
+          { label: "Flatten BST to Sorted List", problem: "https://www.geeksforgeeks.org/problems/flatten-bst-to-sorted-list--111950/0", solution: "https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/30-BST/flattenBST.cpp" },
+          { label: "Sum at Level K", problem: "https://www.naukri.com/code360/problems/kth-level_920333", solution: "https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/31-TreesChallenges/sumAtK.cpp" },
+          { label: "Maximum Level Sum", problem: "https://leetcode.com/problems/maximum-level-sum-of-a-binary-tree/description/", solution: "https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/29-BinaryTree/maxSum.cpp" },
+          { label: "BST keys in range", problem: "https://www.geeksforgeeks.org/dsa/print-bst-keys-in-the-given-range/", solution: "https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/31-TreesChallenges/BSTrange.cpp" },
+          { label: "Bottom View", problem: "https://www.geeksforgeeks.org/problems/bottom-view-of-binary-tree/1", solution: "https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/31-TreesChallenges/bottomView.cpp" },
+          { label: "Zigzag Level Order", problem: "https://leetcode.com/problems/binary-tree-zigzag-level-order-traversal/description/", solution: "https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/31-TreesChallenges/zigzag.cpp" },
+          { label: "Top View", problem: "https://www.geeksforgeeks.org/problems/top-view-of-binary-tree/1", solution: "https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/31-TreesChallenges/topView.cpp" },
+          { label: "Largest BST", problem: "https://www.geeksforgeeks.org/problems/largest-bst/1", solution: "https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/31-TreesChallenges/largestBST.cpp" },
+          { label: "Boundary Traversal", problem: "https://www.geeksforgeeks.org/problems/boundary-traversal-of-binary-tree/1", solution: "https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/31-TreesChallenges/boundaryTraversal.cpp" },
+        ]
+      },
+
+      {
+        id: 11, title: "Section 11: Heaps",
+        notes: ["Heaps :Insert O(log n), Delete O(log n) + Heapify O(log n), Get O(1), Size O(1) {}", 
+        "Create Heap Inplace - O(n) {https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/32-Heaps/2-build-heap.cpp}", 
+        "HeapSort - O(n log n) {https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/32-Heaps/3-heapSort.cpp}", 
+        "priority queue STL + PQ Comparator + PQ for custom classes {https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/32-Heaps/0-heap.cpp}"],
+        neetcode: ["Neetcode 8: Heaps"],
+        questions: [
+          { label: "Minimum Cost of Ropes", problem: "https://www.geeksforgeeks.org/problems/minimum-cost-of-ropes-1587115620/1", solution: "https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/32-Heaps/joinRopes.cpp" },
+          { label: "Merge K Sorted Arrays", problem: "https://www.geeksforgeeks.org/problems/merge-k-sorted-arrays/1", solution: "https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/32-Heaps/mergeKsortedArr.cpp" },
+          { label: "Kth Smallest in Sorted Matrix", problem: "https://leetcode.com/problems/kth-smallest-element-in-a-sorted-matrix/description/", solution: "https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/32-Heaps/kthSmallestinMat.cpp" },
+          { label: "Top-K Frequent Elements", problem: "https://leetcode.com/problems/top-k-frequent-elements/description/", solution: "https://github.com/haseebshaik00/MS-PP-24/blob/main/DSA/Codes/32-Heaps/kFreq.cpp" },
+        ]
+      },
+
+      {
+        id: 12, title: "Section 13: Greedy Algorithms",
+        neetcode: ["Neetcode 15: Greedy Algorithms", "Neetcode 16: Intervals"]
+      },
+
+      {
+        id: 13, title: "Section 14: Dynamic Programming",
+        neetcode: ["Neetcode 13: 1D Dynamic Programming", "Neetcode 14: 1D Dynamic Programming"]
+      },
+
+      {
+        id: 14, title: "Section 15: Graphs",
+        neetcode: ["Neetcode 11: Graphs", "Neetcode 12: Advanced Graphs"]
+      },
+    ];
+
+    /* Render order per section */
+    const DEFAULT_ORDER = ["notes", "concepts", "questions", "neetcode"];
+    const ORDER = {
+      "Section 1: Arrays I": ["notes", "neetcode"],
+      "Section 2: Arrays II": ["concepts", "notes", "neetcode","questions"],
+      "Section 3: Strings": ["notes", "questions"],
+      "Section 4: Binary Search": ["neetcode", "questions"],
+      "Section 5: Bit Manipulation & Number Theory": ["neetcode", "concepts", "notes", "questions"],
+      "Section 6: Recursion": ["notes", "neetcode", "questions"],
+      "Section 7: Linked List": ["neetcode", "notes", "questions"],
+      "Section 8: Stack + Queue + Deque": ["neetcode", "notes", "questions"],
+      "Section 9: Space and Time Complexity": ["notes"],
+      "Section 10: Trees": ["neetcode", "notes", "questions"],
+      "Section 11: Heaps": ["notes", "neetcode", "questions"],
+      "Section 13: Greedy Algorithms": ["notes", "neetcode"],
+      "Section 14: Dynamic Programming": ["notes", "neetcode"],
+      "Section 15: Graphs": ["notes", "neetcode"]
+    };
+
+    /* DOM helpers */
+    const root = document.getElementById('accordionRoot');
+    const searchBox = document.getElementById('searchBox');
+    const filterBar = document.getElementById('filterBar');
+    const toggleEmptyBtn = document.getElementById('toggleEmpty');
+    const eyeIcon = document.getElementById('eyeIcon');
+    const emptyLabel = document.getElementById('emptyLabel');
+    let activeFilter = 'all', hideEmpty = false;
+
+    const normalize = s => (s || '').toLowerCase();
+    function makeChevron() {
+      const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      svg.setAttribute('width', '18'); svg.setAttribute('height', '18'); svg.setAttribute('viewBox', '0 0 24 24'); svg.classList.add('chev');
+      svg.innerHTML = '<path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>';
+      return svg;
+    }
+    function makeSubChevron() {
+      const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      svg.setAttribute('width', '16'); svg.setAttribute('height', '16'); svg.setAttribute('viewBox', '0 0 24 24'); svg.classList.add('subchev');
+      svg.innerHTML = '<path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>';
+      return svg;
+    }
+    function anchor(href, text, disabled = false) {
+      const a = document.createElement('a');
+      a.className = 'link' + (disabled ? ' disabled' : '');
+      a.href = disabled ? '#' : href; a.target = '_blank'; a.rel = 'noreferrer';
+      a.textContent = text; if (disabled) a.setAttribute('aria-disabled', 'true');
+      return a;
+    }
+
+    function makeInlineListItem(raw, category) {
+  const li = document.createElement('li');
+  li.className = `item ${category}-item`;
+
+  let s = String(raw);
+  let href = null, text = s;
+
+  // Supported syntaxes (first match wins):
+  // 1) Markdown: [Label](https://...)
+  const md = s.match(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/);
+  // 2) Braces:  Label {https://...}
+  const brace = s.match(/\{(https?:\/\/[^}]+)\}/);
+  // 3) Colon/Dash: Label: https://...   or   Label - https://...
+  const colon = s.match(/^(.*?)(?:\s*[:\-–]\s*)(https?:\/\/\S+)\s*$/);
+
+  if (md) {
+    text = md[1]; href = md[2];
+  } else if (brace) {
+    href = brace[1];
+    text = s.replace(/\s*\{https?:\/\/[^}]+\}\s*/, '').trim();
+  } else if (colon) {
+    text = colon[1].trim();
+    href = colon[2].trim();
+  }
+
+  li.dataset.category = category;
+  li.dataset.text = (text || '').toLowerCase();
+
+  if (href) {
+    const a = document.createElement('a');
+    a.href = href; a.target = '_blank'; a.rel = 'noreferrer';
+    a.textContent = text; a.className = 'inline-link';
+    li.appendChild(a);
+  } else {
+    li.textContent = text;
+  }
+  return li;
+}
+
+    /* Cards (Notes/Concepts receive the effective notesLink) */
+    function makeNotesCard(list, notesLink) {
+      const card = document.createElement('div'); card.className = 'card notes';
+      const head = document.createElement('div'); head.className = 'card-head';
+      const tag = document.createElement('span'); tag.className = 'tag notes'; tag.textContent = 'Notes';
+      const right = anchor(notesLink, 'Notes');
+      head.appendChild(tag); head.appendChild(right); card.appendChild(head);
+      const ul = document.createElement('ul'); ul.className = 'list';
+      list.forEach(raw => {
+  ul.appendChild(makeInlineListItem(raw, 'notes'));
+});
+
+      card.appendChild(ul); return card;
+    }
+
+    function makeConceptsCard(list, notesLink) {
+      const card = document.createElement('div'); card.className = 'card concept';
+      const head = document.createElement('div'); head.className = 'card-head';
+      const tag = document.createElement('span'); tag.className = 'tag concept'; tag.textContent = 'Concepts';
+      const right = anchor(notesLink, 'Notes');
+      head.appendChild(tag); head.appendChild(right); card.appendChild(head);
+
+      const ul = document.createElement('ul'); ul.className = 'list';
+      list.forEach(raw => {
+  ul.appendChild(makeInlineListItem(raw, 'concept'));
+});
+
+      card.appendChild(ul); return card;
+    }
+
+    function makeNeetcodeCard(list) {
+      const card = document.createElement('div'); card.className = 'card neetcode';
+      const head = document.createElement('div'); head.className = 'card-head';
+      const tag = document.createElement('span'); tag.className = 'tag neetcode'; tag.textContent = 'NeetCode';
+      const right = anchor(NEETCODE_URL, 'NeetCode');
+      head.appendChild(tag); head.appendChild(right); card.appendChild(head);
+      const ul = document.createElement('ul'); ul.className = 'list';
+      list.forEach(n => {
+        const li = document.createElement('li'); li.textContent = n; li.className = 'item neetcode-item';
+        li.dataset.category = 'neetcode'; li.dataset.text = normalize(n);
+        ul.appendChild(li);
+      });
+      card.appendChild(ul); return card;
+    }
+
+    function makeQuestionsCard(qs) {
+      const card = document.createElement('div'); card.className = 'card questions';
+      const head = document.createElement('div'); head.className = 'card-head';
+      const tag = document.createElement('span'); tag.className = 'tag questions'; tag.textContent = 'Questions';
+      head.appendChild(tag); card.appendChild(head);
+
+      const wrap = document.createElement('div'); wrap.className = 'qwrap';
+      const flat = qs.every(x => x.label);
+
+      if (flat) {
+        const ul = document.createElement('ul'); ul.className = 'list';
+        qs.forEach(q => {
+          const li = document.createElement('li'); li.className = 'item question-item';
+          li.dataset.category = 'questions'; li.dataset.text = normalize(q.label);
+          const row = document.createElement('div'); row.className = 'qrow';
+          const span = document.createElement('span'); span.textContent = q.label; span.style.fontSize = '13px';
+          const actions = document.createElement('div'); actions.className = 'row';
+          actions.appendChild(anchor(q.problem, 'Problem'));
+          actions.appendChild(anchor(q.solution || '#', 'Solution', !q.solution));
+          row.appendChild(span); row.appendChild(actions); li.appendChild(row); ul.appendChild(li);
+        });
+        wrap.appendChild(ul);
+      } else {
+        const sub = document.createElement('div'); sub.className = 'sub-acc';
+        qs.forEach((group, gidx) => {
+          const sItem = document.createElement('section'); sItem.className = 'sub-acc-item'; if (gidx === 0) sItem.classList.add('open');
+          const sBtn = document.createElement('button'); sBtn.className = 'sub-acc-button'; sBtn.setAttribute('aria-expanded', gidx === 0 ? 'true' : 'false');
+          const sTitle = document.createElement('div'); sTitle.className = 'sub-acc-title'; sTitle.textContent = group.group;
+          const sChev = makeSubChevron(); sBtn.appendChild(sTitle); sBtn.appendChild(sChev);
+          const sPanel = document.createElement('div'); sPanel.className = 'sub-acc-panel';
+          const ul = document.createElement('ul'); ul.className = 'list';
+          group.items.forEach(q => {
+            const li = document.createElement('li'); li.className = 'item question-item';
+            li.dataset.category = 'questions'; li.dataset.text = normalize(group.group + ' ' + q.label);
+            const row = document.createElement('div'); row.className = 'qrow';
+            const span = document.createElement('span'); span.textContent = q.label; span.style.fontSize = '13px';
+            const actions = document.createElement('div'); actions.className = 'row';
+            actions.appendChild(anchor(q.problem, 'Problem'));
+            actions.appendChild(anchor(q.solution || '#', 'Solution', !q.solution));
+            row.appendChild(span); row.appendChild(actions); li.appendChild(row); ul.appendChild(li);
+          });
+          sPanel.appendChild(ul);
+          sBtn.addEventListener('click', () => { const open = sItem.classList.toggle('open'); sBtn.setAttribute('aria-expanded', open ? 'true' : 'false'); });
+          sItem.appendChild(sBtn); sItem.appendChild(sPanel); sub.appendChild(sItem);
+        });
+        wrap.appendChild(sub);
+      }
+      card.appendChild(wrap); return card;
+    }
+
+    /* Build cards from a source object, respecting notesUrl fallback chain */
+    function buildCardsFrom(src, inheritedNotesUrl) {
+      const effectiveNotesUrl = src.notesUrl || inheritedNotesUrl || NOTES_URL;
+      const cards = {};
+      if (src.notes && src.notes.length) cards.notes = makeNotesCard(src.notes, effectiveNotesUrl);
+      if (src.concepts && src.concepts.length) cards.concepts = makeConceptsCard(src.concepts, effectiveNotesUrl);
+      if (src.neetcode && src.neetcode.length) cards.neetcode = makeNeetcodeCard(src.neetcode);
+      if (src.questions && src.questions.length) cards.questions = makeQuestionsCard(src.questions);
+      return cards;
+    }
+
+    function build() {
+      root.innerHTML = '';
+      SECTIONS.forEach((sec, idx) => {
+        const item = document.createElement('section'); item.className = 'acc-item';
+        const btn = document.createElement('button'); btn.className = 'acc-button'; btn.setAttribute('aria-expanded', idx === 0 ? 'true' : 'false');
+        const title = document.createElement('div'); title.className = 'acc-title'; title.textContent = sec.title;
+        const chev = makeChevron(); btn.appendChild(title); btn.appendChild(chev);
+        const panel = document.createElement('div'); panel.className = 'acc-panel';
+
+        if (sec.subsections && sec.subsections.length) {
+          const sub = document.createElement('div'); sub.className = 'sub-acc';
+          sec.subsections.forEach((subsec, sidx) => {
+            const sItem = document.createElement('section'); sItem.className = 'sub-acc-item'; if (sidx === 0) sItem.classList.add('open');
+            const sBtn = document.createElement('button'); sBtn.className = 'sub-acc-button'; sBtn.setAttribute('aria-expanded', sidx === 0 ? 'true' : 'false');
+            const sTitle = document.createElement('div'); sTitle.className = 'sub-acc-title'; sTitle.textContent = subsec.heading;
+            const sChev = makeSubChevron(); sBtn.appendChild(sTitle); sBtn.appendChild(sChev);
+            const sPanel = document.createElement('div'); sPanel.className = 'sub-acc-panel';
+
+            const cards = buildCardsFrom(subsec, sec.notesUrl); // inherit section notesUrl if set
+            const order = ORDER[sec.title] || DEFAULT_ORDER;
+            order.forEach(key => { if (cards[key]) sPanel.appendChild(cards[key]); });
+
+            sBtn.addEventListener('click', () => { const open = sItem.classList.toggle('open'); sBtn.setAttribute('aria-expanded', open ? 'true' : 'false'); });
+            sItem.appendChild(sBtn); sItem.appendChild(sPanel); sub.appendChild(sItem);
+          });
+          panel.appendChild(sub);
+        } else {
+          const cards = buildCardsFrom(sec, null);
+          const order = ORDER[sec.title] || DEFAULT_ORDER;
+          order.forEach(key => { if (cards[key]) panel.appendChild(cards[key]); });
+        }
+
+        if (idx === 0) item.classList.add('open');
+        btn.addEventListener('click', () => { const open = item.classList.toggle('open'); btn.setAttribute('aria-expanded', open ? 'true' : 'false'); });
+        item.appendChild(btn); item.appendChild(panel); root.appendChild(item);
+      });
+    }
+
+    function applyFilters() {
+      const q = normalize(searchBox.value);
+      root.querySelectorAll('.item').forEach(el => {
+        const cat = el.dataset.category;
+        const text = el.dataset.text || '';
+        const catOk = (activeFilter === 'all' || activeFilter === cat);
+        const textOk = (!q || text.includes(q));
+        el.style.display = (catOk && textOk) ? '' : 'none';
+      });
+
+      // Hide mini-accordion items with no visible children
+      root.querySelectorAll('.sub-acc-item').forEach(s => {
+        const any = Array.from(s.querySelectorAll('.item')).some(li => li.style.display !== 'none');
+        s.style.display = any ? '' : 'none';
+      });
+
+      // Hide empty cards
+      root.querySelectorAll('.card').forEach(card => {
+        const any = Array.from(card.querySelectorAll('.item')).some(li => li.style.display !== 'none');
+        card.style.display = any ? '' : 'none';
+      });
+
+      // Optionally hide whole sections
+      root.querySelectorAll('.acc-item').forEach(sec => {
+        const any = Array.from(sec.querySelectorAll('.item')).some(li => li.style.display !== 'none');
+        sec.classList.toggle('empty', !any);
+        sec.style.display = hideEmpty ? (any ? '' : 'none') : '';
+      });
+    }
+
+    filterBar.addEventListener('click', e => {
+      const btn = e.target.closest('[data-filter]'); if (!btn) return;
+      const next = btn.getAttribute('data-filter');
+      activeFilter = (activeFilter === next) ? 'all' : next;
+      filterBar.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+      if (activeFilter !== 'all') btn.classList.add('active');
+      applyFilters();
+    });
+
+    searchBox.addEventListener('input', applyFilters);
+    toggleEmptyBtn.addEventListener('click', () => {
+      hideEmpty = !hideEmpty;
+      emptyLabel.textContent = hideEmpty ? 'Show all' : 'Hide empty';
+      eyeIcon.innerHTML = hideEmpty
+        ? '<path d="M17.94 17.94A10.94 10.94 0 0 1 12 20C5 20 1 12 1 12a21.8 21.8 0 0 1 5.06-6.94m3.23-2.06A10.94 10.94 0 0 1 12 4c7 0 11 8 11 8a21.8 21.8 0 0 1-4.87 6.13M1 1l22 22M9.88 9.88a3 3 0 1 0 4.24 4.24"/>'
+        : '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"></path><circle cx="12" cy="12" r="3"></circle>';
+      applyFilters();
+    });
+
+    build();
+    applyFilters();
+  </script>
+</body>
+
+</html>
